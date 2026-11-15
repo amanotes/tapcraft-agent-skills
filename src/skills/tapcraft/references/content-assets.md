@@ -21,7 +21,7 @@ game/
 └── settings/cocos.config.json
 ```
 
-Run `npx com.amanotes.tapcraft-kit@1.1.0 create <slug>` for a new project or install the dependency and run `npx tapcraft init` for an existing one. Re-run `init` after a kit update so kit-owned runtime and templates match.
+Run `npx com.amanotes.tapcraft-kit@1.2.0 create <slug>` for a new project or install the dependency and run `npx tapcraft init` for an existing one. Re-run `init` after a kit update so kit-owned runtime and templates match.
 
 ## Decide local versus remote
 
@@ -41,7 +41,7 @@ The app sets `globalThis.__AMA_GDK__.content` before Cocos initializes:
 { "cdn": "https://host/", "bundles": null, "remoteBundles": null }
 ```
 
-Kit 1.1 combines that host with `globalThis.__AMA_GDK__.game.id` and derives
+Kit 1.1 and later combine that host with `globalThis.__AMA_GDK__.game.id` and derives
 `<cdn>miniapps/<slug>/`. The platform layout is:
 
 ```text

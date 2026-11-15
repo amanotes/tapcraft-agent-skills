@@ -17,7 +17,7 @@ TapCraft runs many games inside one shared Cocos engine. A normal Cocos solution
 
    It must not update the plugin, install packages, or edit the game. Work offline when the check cannot reach GitHub or npm.
 2. Inspect `package.json`, `game.json`, and the current build before proposing changes.
-3. Baseline contract: `com.amanotes.tapcraft-kit` **1.1.0**, Cocos Creator **4.0.0-beta.1**, engine profile **8ec328**. Kit 1.1 requires a storage-v4 app that injects `content.cdn`; it is incompatible with an old `content.server` app. Prefer a newer stable kit only after reading its changelog and confirming compatibility with the installed TapCraft app. Ask before changing an existing dependency.
+3. Baseline contract: `com.amanotes.tapcraft-kit` **1.2.0** (AmaGDK 1.1.0; 1.1.0 still supported), Cocos Creator **4.0.0-beta.1**, engine profile **8ec328**. Kit 1.2 adds `platform.system`, `platform.launch`, `hapticPattern` and unsubscribe functions from `onPause` / `onResume`, with no engine profile change: an existing 1.1 game updates with `npm install --save-dev com.amanotes.tapcraft-kit@1.2.0`, `npx tapcraft init` and a new build. Kit 1.1 and later require a storage-v4 app that injects `content.cdn`; it is incompatible with an old `content.server` app. Prefer a newer stable kit only after reading its changelog and confirming compatibility with the installed TapCraft app. Ask before changing an existing dependency.
 4. Read only the references required by the task.
 
 ## Non-negotiable overrides
@@ -38,7 +38,7 @@ Read [references/content-assets.md](references/content-assets.md).
 - Import only the kit modules `platform`, `content`, and `saves`. Game code never calls AmaGDK, native bridges, ad SDKs, payment SDKs, or the Cocos quit lifecycle directly.
 - Boot order: `platform.init()` → first loading frame → `firstFrameReady()` → `hidePlatformLoadingScreen()` → load local core/menu → `gameReady()`.
 - Exit with `platform.requestExit()`. Never call `game.end`, `director.end`, `game.restart`, `sys.close`, or native reflection/bridge APIs.
-- Save with `saves`; never call `localStorage.clear()`. Pause gameplay and all audio for every `platform.onPause` reason.
+- Save with `saves`; never call `localStorage.clear()`. Pause gameplay and all audio for every `platform.onPause` reason (`hubMenu`, `background`, `ad`, `exit`, `system`); a component that subscribes calls the returned unsubscribe function in `onDestroy`.
 - Wrap actual runs in `gameplayStart()` / `gameplayStop()` and close every pair.
 
 Read [references/game-contract.md](references/game-contract.md) and [references/platform.md](references/platform.md).

@@ -12,8 +12,8 @@ lifecycle, saves, build settings, performance, and publishing.
 
 | Component | Verified baseline |
 |---|---|
-| Agent plugin | 1.0.0 |
-| `com.amanotes.tapcraft-kit` | 1.1.0 |
+| Agent plugin | 1.1.0 |
+| `com.amanotes.tapcraft-kit` | 1.2.0 (1.1.0 minimum) |
 | Cocos Creator | 4.0.0-beta.1 |
 | Engine profile | `8ec328` |
 
@@ -72,7 +72,7 @@ in this repository.
 Current verified baseline:
 
 ```bash
-npm install --save-dev com.amanotes.tapcraft-kit@1.1.0
+npm install --save-dev com.amanotes.tapcraft-kit@1.2.0
 npx tapcraft init
 npx tapcraft build all
 npx tapcraft check
@@ -82,7 +82,7 @@ npx tapcraft serve
 For a new project:
 
 ```bash
-npx com.amanotes.tapcraft-kit@1.1.0 create <slug>
+npx com.amanotes.tapcraft-kit@1.2.0 create <slug>
 ```
 
 Before choosing a newer stable kit, run the update check and read that release's

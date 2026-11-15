@@ -9,7 +9,7 @@
       "name": "tapcraft",
       "source": "./packages/claude",
       "description": "Develop, port, optimize, test, and publish Cocos Creator games for the TapCraft platform.",
-      "version": "1.0.0"
+      "version": "1.1.0"
     }
   ]
 }

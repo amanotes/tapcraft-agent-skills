@@ -4,7 +4,7 @@
 
 | Contract | Baseline |
 |---|---|
-| Kit | `com.amanotes.tapcraft-kit` 1.1.0 |
+| Kit | `com.amanotes.tapcraft-kit` 1.2.0 (AmaGDK 1.1.0) |
 | Engine | Cocos Creator 4.0.0-beta.1 |
 | Engine profile | `8ec328` |
 | Orientation | portrait, 9:16 through 9:21 |
@@ -53,7 +53,7 @@ Wrap each level, song, or run in `gameplayStart()` and `gameplayStop()`. Interst
 - The installed pack must reach menu and first gameplay offline.
 - HTTPS only. Never collect identifiers, contacts, or location.
 - Do not link to external stores or imitate the hub UI.
-- Handle timeout, unavailable, cancellation, and no-fill as normal outcomes.
+- Handle unavailable, cancellation, no-fill, and error as normal outcomes. Ad calls have no timeout (they settle when the ad closes); add your own deadline where a flow must not wait.
 
 ## `game.json`
 
