@@ -8,7 +8,7 @@ code, prompts, or project files to the plugin authors.
 The bundled read-only update check may request:
 
 - the latest release metadata from GitHub for
-  `amanotes/tapcraft-agent-skills`;
+  `phuongntamanotes/tapcraft-agent-skills`;
 - public package metadata from the npm registry for
   `com.amanotes.tapcraft-kit`.
 

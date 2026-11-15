@@ -39,7 +39,7 @@ async function fixture({ plugin = '1.0.0', kit, latestPlugin, latestKit }) {
       verifiedKitVersion: '1.1.0',
       engineVersion: '4.0.0-beta.1',
       engineProfile: '8ec328',
-      githubRepository: 'amanotes/tapcraft-agent-skills',
+      githubRepository: 'phuongntamanotes/tapcraft-agent-skills',
     }),
   );
   if (latestPlugin || latestKit) {
@@ -48,7 +48,7 @@ async function fixture({ plugin = '1.0.0', kit, latestPlugin, latestKit }) {
       cachePath,
       JSON.stringify({
         checkedAt: new Date().toISOString(),
-        githubRepository: 'amanotes/tapcraft-agent-skills',
+        githubRepository: 'phuongntamanotes/tapcraft-agent-skills',
         latestPlugin,
         latestKit,
       }),
