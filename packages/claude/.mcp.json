@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "tapcraft": {
+      "type": "http",
+      "url": "https://tap-craft-8ezo.web.app/api/mcp"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "tapcraft",
+  "version": "1.0.0",
+  "description": "Develop, port, optimize, test, and publish Cocos Creator games for the TapCraft platform.",
+  "author": {
+    "name": "Amanotes TapCraft team"
+  },
+  "homepage": "https://github.com/amanotes/tapcraft-agent-skills",
+  "repository": "https://github.com/amanotes/tapcraft-agent-skills",
+  "logo": "assets/icon.png",
+  "license": "Apache-2.0",
+  "keywords": [
+    "tapcraft",
+    "cocos-creator",
+    "game-development",
+    "amagdk"
+  ],
+  "skills": "./skills/",
+  "rules": "./rules/",
+  "commands": "./commands/",
+  "mcpServers": "./mcp.json"
+}

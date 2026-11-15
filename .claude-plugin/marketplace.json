@@ -1,0 +1,15 @@
+{
+  "name": "tapcraft",
+  "description": "TapCraft game development agent plugin.",
+  "owner": {
+    "name": "Amanotes TapCraft team"
+  },
+  "plugins": [
+    {
+      "name": "tapcraft",
+      "source": "./packages/claude",
+      "description": "Develop, port, optimize, test, and publish Cocos Creator games for the TapCraft platform.",
+      "version": "1.0.0"
+    }
+  ]
+}

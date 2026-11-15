@@ -1,93 +1,141 @@
-# tapcraft-agent-skills
+# TapCraft agent plugin
 
-TapCraft agent skills and plugin distribution for Claude Code and Cursor
+The official agent skill and MCP configuration for developing, porting,
+testing, optimizing, and publishing Cocos Creator games on the TapCraft
+platform.
 
-## Getting started
+One canonical skill is packaged for both Claude Code and Cursor. TapCraft
+contracts override generic Cocos defaults for asset bundles, remote content,
+lifecycle, saves, build settings, performance, and publishing.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Compatibility
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+| Component | Verified baseline |
+|---|---|
+| Agent plugin | 1.0.0 |
+| `com.amanotes.tapcraft-kit` | 1.1.0 |
+| Cocos Creator | 4.0.0-beta.1 |
+| Engine profile | `8ec328` |
 
-## Add your files
+TapCraft prefers the latest stable plugin and kit. The skill performs a
+read-only version check at the beginning of a TapCraft task. It never installs
+or upgrades anything automatically.
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+## Install in Claude Code
 
+From the Amanotes GitLab repository:
+
+```bash
+claude plugin marketplace add git@gitlab.amanotes.net:sdk/game-studio/tapcraft-agent-skills.git
+claude plugin install tapcraft@tapcraft
 ```
-cd existing_repo
-git remote add origin https://gitlab.amanotes.net/sdk/game-studio/tapcraft-agent-skills.git
-git branch -M main
-git push -uf origin main
+
+After the public GitHub mirror is available:
+
+```bash
+claude plugin marketplace add amanotes/tapcraft-agent-skills
+claude plugin install tapcraft@tapcraft
 ```
 
-## Integrate with your tools
+Start a new session or run `/reload-plugins`. Claude automatically discovers
+the `tapcraft` skill from its description. `/tapcraft:tapcraft` is the explicit
+fallback.
 
-* [Set up project integrations](https://gitlab.amanotes.net/sdk/game-studio/tapcraft-agent-skills/-/settings/integrations)
+## Install in Cursor
 
-## Collaborate with your team
+After the GitHub mirror is public:
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+1. Open **Cursor Settings → Plugins**.
+2. Choose **Add from GitHub Repository**.
+3. Paste `https://github.com/amanotes/tapcraft-agent-skills`.
+4. Install the `tapcraft` plugin.
 
-## Test and Deploy
+For local development, build the repository and load `packages/cursor` as a
+local Cursor plugin.
 
-Use the built-in continuous integration in GitLab.
+The Cursor package includes a small router rule that loads the skill whenever
+the prompt mentions TapCraft or the project depends on
+`com.amanotes.tapcraft-kit`.
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+## Connect the platform MCP
 
-***
+Both packages include the same OAuth MCP endpoint. Open the client's MCP panel,
+enable `tapcraft`, and complete sign-in. Start with `whoami` to verify account
+and studio access.
 
-# Editing this README
+The repository is safe to publish publicly, but game management and publishing
+require an authorized TapCraft account. No tokens or upload credentials belong
+in this repository.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+## Start or migrate a game
 
-## Suggestions for a good README
+Current verified baseline:
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+```bash
+npm install --save-dev com.amanotes.tapcraft-kit@1.1.0
+npx tapcraft init
+npx tapcraft build all
+npx tapcraft check
+npx tapcraft serve
+```
 
-## Name
-Choose a self-explaining name for your project.
+For a new project:
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+```bash
+npx com.amanotes.tapcraft-kit@1.1.0 create <slug>
+```
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+Before choosing a newer stable kit, run the update check and read that release's
+changelog and app compatibility requirements.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## Updates
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Ask the agent to check TapCraft updates. In Claude Code, the explicit command
+is `/tapcraft:check-updates`. From a source checkout, either generated package
+contains the same read-only script:
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+```bash
+node packages/claude/skills/tapcraft/scripts/check-updates.mjs --force
+node packages/cursor/skills/tapcraft/scripts/check-updates.mjs --force
+```
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Claude Code:
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+```bash
+claude plugin update tapcraft@tapcraft
+```
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Cursor update behavior depends on how the plugin was installed. Refresh the
+GitHub marketplace or reinstall the plugin when an update is reported; this
+repository does not claim unsupported automatic updates.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+## Repository structure
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+```text
+src/                         canonical source
+  skills/tapcraft/
+  rules/
+  commands/
+packages/claude/             generated Claude Code plugin
+packages/cursor/             generated Cursor plugin
+.claude-plugin/              generated Claude marketplace
+.cursor-plugin/              generated Cursor marketplace
+scripts/                     build and validation
+test/                        update-check tests
+```
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+Do not edit generated package files. Change `src/` or `release-info.json`, then
+run:
+
+```bash
+npm test
+```
+
+The build is deterministic and validation fails when the two distributions
+drift, contain stale storage contracts, or expose likely secrets.
 
 ## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Apache-2.0.
+
+See [Privacy](PRIVACY.md) for the update checker and platform MCP data flow.

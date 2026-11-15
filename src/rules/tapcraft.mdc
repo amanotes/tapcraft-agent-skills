@@ -1,0 +1,10 @@
+---
+description: Route every TapCraft platform task to the tapcraft skill.
+alwaysApply: true
+---
+
+If the user mentions TapCraft/tapcraft, the repository depends on
+`com.amanotes.tapcraft-kit`, or the task changes a game built for the TapCraft
+platform, load and follow the `tapcraft` skill before planning, reviewing, or
+editing. TapCraft asset, lifecycle, build, storage, and publishing contracts
+override generic Cocos defaults.

@@ -1,0 +1,10 @@
+image: node:22-alpine
+
+stages:
+  - test
+
+test:
+  stage: test
+  script:
+    - npm test
+    - git diff --exit-code
