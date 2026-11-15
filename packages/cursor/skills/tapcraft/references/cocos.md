@@ -17,4 +17,17 @@
 - Avoid `const enum`, CommonJS `require`, `.ts` import extensions, and duplicate `@ccclass` names.
 - Do not configure native audio sessions or patch engine/native templates outside the kit.
 
+## Cocos Creator 4.0 reference
+
+Distilled from the Cocos 4.0 manual (mostly 3.8 text) and corrected from the 4.0.0-beta.1 engine source; corrections are marked **[4.0 src]**. Each page starts with what TapCraft changes.
+
+| Topic | Read |
+|---|---|
+| Bundles, assetManager, loading, disk cache, releasing memory | [cocos-creator/asset-bundles.md](cocos-creator/asset-bundles.md) |
+| Components, events, UI and batching, Widget, Label, tween, audio, animation, Spine, particles | [cocos-creator/scripting-ui.md](cocos-creator/scripting-ui.md) |
+| Build output, `settings.json`, engine modules, debugging and profiling | [cocos-creator/build-native.md](cocos-creator/build-native.md) |
+| Textures, atlases, compression, fonts, materials, shaders, physics | [cocos-creator/rendering-assets.md](cocos-creator/rendering-assets.md) |
+
+To look further, read the online manual at <https://docs.cocos.com/creator/4.0/manual/en/>, then a real build's `data/src/settings.json` and `data/remote/<bundle>/cc.config.*.json`.
+
 When generic Cocos documentation conflicts with `tapcraft build`, `tapcraft check`, the current kit, or the platform MCP, follow TapCraft.

@@ -44,6 +44,74 @@ Types do not prove a capability is enabled; members marked `@experimental` in `a
 - Pause all gameplay and audio while the platform reports pause reason `ad`.
 - Do not add a second pacing/capping policy; the platform owns it.
 
+Outcomes: `showRewarded` → `granted | cancelled | noFill | unavailable | error`; `showInterstitial` → `shown | skipped | noFill | unavailable | error`. `platform.isAdReady(format, placement)` is a hint for the UI, not a guarantee.
+
+### Rewarded (RW): revive offer
+
+```ts
+import { _decorator, Component, Node, Button } from 'cc';
+import { platform } from './hub/platform';         // assets/scripts/hub is kit-owned
+const { ccclass, property } = _decorator;
+
+@ccclass('ReviveOffer')
+export class ReviveOffer extends Component {
+    @property(Node) adIcon: Node | null = null;     // "watch ad" badge on the button
+    @property(Button) reviveButton: Button | null = null;
+    onRevive: () => void = () => {};                // set by the gameplay controller
+    onMessage: (text: string) => void = () => {};
+    private busy = false;                           // one ad request at a time
+
+    show(): void {
+        // The player is already out of the run: gameplayStop() was called on death.
+        this.node.active = true;
+        if (this.adIcon) this.adIcon.active = platform.isAdReady('rewarded', 'revive');
+    }
+
+    async onReviveTap(): Promise<void> {
+        if (this.busy) return;
+        this.busy = true;
+        if (this.reviveButton) this.reviveButton.interactable = false;
+        const outcome = await platform.showRewarded('revive');   // settles when the ad closes
+        this.busy = false;
+        if (!this.node.isValid) return;                           // scene changed meanwhile
+        if (this.reviveButton) this.reviveButton.interactable = true;
+
+        if (outcome === 'granted') {
+            this.node.active = false;
+            this.onRevive();                                      // grant only on 'granted'
+            platform.gameplayStart();                             // reopen the run
+        } else if (outcome === 'noFill' || outcome === 'unavailable' || outcome === 'error') {
+            this.onMessage('No video available right now');       // offer stays; player may skip
+        }
+        // 'cancelled': player closed the ad early, no reward, keep the offer on screen
+    }
+}
+```
+
+### Interstitial (IS): natural break after a level
+
+```ts
+async function onLevelComplete(level: number): Promise<void> {
+    platform.gameplayStop();                         // interstitials are skipped while gameplay is open
+    await showResultScreen(level);                   // player sees the result first
+    await platform.showInterstitial('level_end');    // every outcome continues: shown | skipped | noFill | unavailable | error
+    goToNextLevelOrMenu();
+}
+```
+
+- Never show an interstitial before the first gameplay, on boot, or in the middle of a run.
+- Do not check `isAdReady` or count levels before an interstitial; the platform paces and caps (`skipped`).
+- Audio and timers stop through `onPause('ad')` and restart in `onResume`, not around the `await`.
+
+### When a flow must not wait
+
+```ts
+const timeout = new Promise<'timeout'>((ok) => setTimeout(() => ok('timeout'), 8000));
+const outcome = await Promise.race([platform.showRewarded('double_coins'), timeout]);
+// On 'timeout' continue without the reward; if the late result is 'granted', grant it then
+// (or document why not) so the UI never shows a reward the player did not get.
+```
+
 ## Unavailable capabilities
 
 Create adapters with no-op/unavailable behavior rather than calling native APIs:

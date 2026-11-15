@@ -12,7 +12,7 @@ lifecycle, saves, build settings, performance, and publishing.
 
 | Component | Verified baseline |
 |---|---|
-| Agent plugin | 1.1.0 |
+| Agent plugin | 1.1.1 |
 | `com.amanotes.tapcraft-kit` | 1.2.0 |
 | Cocos Creator | 4.0.0-beta.1 |
 | Engine profile | `8ec328` |

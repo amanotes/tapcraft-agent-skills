@@ -17,7 +17,7 @@ TapCraft runs many games inside one shared Cocos engine. A normal Cocos solution
 
    It must not update the plugin, install packages, or edit the game. Work offline when the check cannot reach GitHub or npm.
 2. Inspect `package.json`, `game.json`, and the current build before proposing changes.
-3. Baseline contract: `com.amanotes.tapcraft-kit` **1.2.0**, also the minimum (AmaGDK 1.1.0), Cocos Creator **4.0.0-beta.1**, engine profile **8ec328**. Kit 1.2 adds `platform.system`, `platform.launch`, `hapticPattern` and unsubscribe functions from `onPause` / `onResume`, with no engine profile change: a game on an older kit updates with `npm install --save-dev com.amanotes.tapcraft-kit@1.2.0`, `npx tapcraft init` and a new build. Kit 1.1 and later require a storage-v4 app that injects `content.cdn`; it is incompatible with an old `content.server` app. Prefer a newer stable kit only after reading its changelog and confirming compatibility with the installed TapCraft app. Ask before changing an existing dependency.
+3. Baseline contract: `com.amanotes.tapcraft-kit` **1.2.0**, also the minimum (AmaGDK 1.1.0), Cocos Creator **4.0.0-beta.1**, engine profile **8ec328**. Kit 1.2 adds `platform.system`, `platform.launch`, `hapticPattern` and unsubscribe functions from `onPause` / `onResume`, with no engine profile change: a game on an older kit updates with `npm install --save-dev com.amanotes.tapcraft-kit@1.2.0`, `npx tapcraft init` and a new build. Prefer a newer stable kit only after reading its changelog and confirming compatibility with the installed TapCraft app. Ask before changing an existing dependency.
 4. Read only the references required by the task.
 
 ## Non-negotiable overrides
@@ -28,7 +28,6 @@ TapCraft runs many games inside one shared Cocos engine. A normal Cocos solution
 - Every Cocos asset belongs to a bundle. Keep boot, menu, first gameplay, shared UI/SFX, and everything needed in the first 30 seconds or offline in local bundles. Put later content in remote bundles.
 - Remote bundles contain assets, never scripts. Load them by stable bundle name; the kit resolves dependencies, retries, references, cache, and release.
 - Runtime JSON belongs under project `files/data/` and is read with `content.json`. Raw files belong under `files/assets/` and use `content.url`. Do not hard-code a CDN, content version, or storage path.
-- Storage v4 root is `<cdn>miniapps/<slug>/`; the app injects `content.cdn`. Never use legacy `content.server` or `games/<slug>/files/`.
 - Release dynamically loaded content with `content.release`; clear game-owned pools in `content.onLowMemory`.
 
 Read [references/content-assets.md](references/content-assets.md).
@@ -66,12 +65,16 @@ Read [references/publishing.md](references/publishing.md).
 | Task | Read |
 |---|---|
 | Rules, forbidden APIs, lifecycle, storage, `game.json` | [references/game-contract.md](references/game-contract.md) |
-| Local/remote split, loaders, storage v4, release | [references/content-assets.md](references/content-assets.md) |
+| Local/remote split, loaders, remote cache for songs and levels, release | [references/content-assets.md](references/content-assets.md) |
 | AmaGDK surfaces, ads, unavailable capabilities | [references/platform.md](references/platform.md) |
 | Build, check, serve, device checklist | [references/dev-loop.md](references/dev-loop.md) |
 | Startup, pack size, frame time, memory | [references/performance.md](references/performance.md) |
 | MCP uploads, builds, versions, store page | [references/publishing.md](references/publishing.md) |
 | Cocos 4 pitfalls specific to TapCraft | [references/cocos.md](references/cocos.md) |
+| Cocos bundles, assetManager, disk cache, releasing memory | [references/cocos-creator/asset-bundles.md](references/cocos-creator/asset-bundles.md) |
+| Cocos components, events, UI and batching, Widget, Label, tween, audio, animation, Spine | [references/cocos-creator/scripting-ui.md](references/cocos-creator/scripting-ui.md) |
+| Cocos build output, `settings.json`, engine modules, debugging and profiling | [references/cocos-creator/build-native.md](references/cocos-creator/build-native.md) |
+| Cocos textures, atlases, compression, fonts, materials, shaders, physics | [references/cocos-creator/rendering-assets.md](references/cocos-creator/rendering-assets.md) |
 | Boot component example | [templates/boot.ts](templates/boot.ts) |
 
 ## Completion standard

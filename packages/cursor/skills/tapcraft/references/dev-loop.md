@@ -38,7 +38,7 @@ Warnings require human review: pack over the 8 MB target, remote bundle over 5 M
 npx tapcraft serve
 ```
 
-The server exposes a storage-v4-shaped dev URL and `dev.json`. In the internal TapCraft app, set Dev content server to the printed URL. Rebuild and restart the server after content changes.
+The server exposes a dev URL and `dev.json` shaped like the CDN. In the internal TapCraft app, set Dev content server to the printed URL. Rebuild and restart the server after content changes.
 
 ## Device checklist
 

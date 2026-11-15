@@ -18,7 +18,7 @@ Read resources:
 
 - **Game:** permanent slug matching `game.json.id`.
 - **Build:** immutable pack zip for one platform, with an increasing build number.
-- **Game files:** `miniapps/<slug>/remote/`, `data/`, and `assets/`.
+- **Game files:** `remote/`, `data/`, and `assets/` of the game, uploaded through the MCP.
 - **Version:** version string, iOS/Android build numbers, and store listing.
 
 ## Release order
@@ -43,29 +43,20 @@ Read resources:
 10. Create or update a version, request media uploads, run each returned
     `upload.curl`, and assign both builds.
 11. Fetch and show the final version state. The API re-reads each build's
-    `settings*.json` and refuses `publish_version` when a listed
-    `miniapps/<slug>/remote/<bundle>/cc.config.<ver>.json` is missing.
+    `settings*.json` and refuses `publish_version` when a listed remote
+    bundle manifest (`remote/<bundle>/cc.config.<ver>.json`) is missing.
 12. Ask for explicit confirmation before `publish_version`.
 
-## Storage v4
+## Game files
 
-```text
-platform/miniapps/<slug>/builds/<platform>/<number>.zip
-platform/miniapps/<slug>/media/<id>-<name>
-miniapps/<slug>/remote/<bundle>/...
-miniapps/<slug>/data/...
-miniapps/<slug>/assets/...
-```
-
-Remote bundle files are create-only and immutable. Data is replaceable with a short cache. Do not delete remote files used by any published version or rollback target.
+Remote bundle files are create-only and immutable. Data is replaceable with a short cache. Do not delete remote files used by any published version or rollback target. Where files live on the CDN is the platform's concern: use the prefixes and commands the MCP returns.
 
 ## Safety
 
 - Use upload commands returned by MCP; signed URLs expire.
 - Never type or persist signed upload URLs.
 - Only the MCP writes platform/CDN storage.
-- `upload_files` takes a prefix relative to `miniapps/<slug>/`; callers never
-  upload to a complete bucket path.
+- `upload_files` takes a prefix relative to the game's files (`remote/`,
+  `data/`, `assets/`); never upload to a bucket path.
 - Ask before publish, unpublish, delete, move, or membership/role changes.
 - Roll back by publishing an older valid version through the supported workflow.
-- Do not use removed channel catalogs, `publish_catalog`, `promote_build`, or legacy `games/<slug>/files/`.
