@@ -23,17 +23,10 @@ or upgrades anything automatically.
 
 ## Install in Claude Code
 
-From the Amanotes GitLab repository:
+From [GitHub](https://github.com/phuongntamanotes/tapcraft-agent-skills):
 
 ```bash
-claude plugin marketplace add git@gitlab.amanotes.net:sdk/game-studio/tapcraft-agent-skills.git
-claude plugin install tapcraft@tapcraft
-```
-
-After the public GitHub mirror is available:
-
-```bash
-claude plugin marketplace add amanotes/tapcraft-agent-skills
+claude plugin marketplace add phuongntamanotes/tapcraft-agent-skills
 claude plugin install tapcraft@tapcraft
 ```
 
@@ -43,11 +36,9 @@ fallback.
 
 ## Install in Cursor
 
-After the GitHub mirror is public:
-
 1. Open **Cursor Settings → Plugins**.
 2. Choose **Add from GitHub Repository**.
-3. Paste `https://github.com/amanotes/tapcraft-agent-skills`.
+3. Paste `https://github.com/phuongntamanotes/tapcraft-agent-skills`.
 4. Install the `tapcraft` plugin.
 
 For local development, build the repository and load `packages/cursor` as a
