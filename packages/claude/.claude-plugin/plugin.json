@@ -5,9 +5,9 @@
   "author": {
     "name": "Amanotes TapCraft team"
   },
-  "homepage": "https://github.com/phuongntamanotes/tapcraft-agent-skills",
-  "repository": "https://github.com/phuongntamanotes/tapcraft-agent-skills",
-  "privacyPolicyUrl": "https://github.com/phuongntamanotes/tapcraft-agent-skills/blob/main/PRIVACY.md",
+  "homepage": "https://github.com/amanotes/tapcraft-agent-skills",
+  "repository": "https://github.com/amanotes/tapcraft-agent-skills",
+  "privacyPolicyUrl": "https://github.com/amanotes/tapcraft-agent-skills/blob/main/PRIVACY.md",
   "icon": "assets/icon.png",
   "license": "Apache-2.0",
   "keywords": [

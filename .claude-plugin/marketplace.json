@@ -1,15 +1,22 @@
 {
-  "name": "tapcraft",
-  "description": "TapCraft game development agent plugin.",
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "amanotes",
+  "version": "1.1.1",
+  "description": "Amanotes TapCraft agent plugins",
   "owner": {
-    "name": "Amanotes TapCraft team"
+    "name": "Amanotes TapCraft team",
+    "url": "https://github.com/amanotes"
   },
   "plugins": [
     {
       "name": "tapcraft",
-      "source": "./packages/claude",
       "description": "Develop, port, optimize, test, and publish Cocos Creator games for the TapCraft platform.",
-      "version": "1.1.1"
+      "version": "1.1.1",
+      "author": {
+        "name": "Amanotes TapCraft team"
+      },
+      "source": "./packages/claude",
+      "category": "development"
     }
   ]
 }

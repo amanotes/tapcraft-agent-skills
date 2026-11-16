@@ -7,6 +7,8 @@ const info = JSON.parse(await readFile(join(root, 'release-info.json'), 'utf8'))
 const description =
   'Develop, port, optimize, test, and publish Cocos Creator games for the TapCraft platform.';
 const author = { name: 'Amanotes TapCraft team' };
+const marketplaceName = 'amanotes';
+const marketplaceDescription = 'Amanotes TapCraft agent plugins';
 const repository = `https://github.com/${info.githubRepository}`;
 
 async function json(path, value) {
@@ -87,23 +89,27 @@ await json(join(cursor, 'mcp.json'), {
 });
 
 await json(join(root, '.claude-plugin', 'marketplace.json'), {
-  name: 'tapcraft',
-  description: 'TapCraft game development agent plugin.',
-  owner: author,
+  $schema: 'https://json.schemastore.org/claude-code-marketplace.json',
+  name: marketplaceName,
+  version: info.pluginVersion,
+  description: marketplaceDescription,
+  owner: { ...author, url: 'https://github.com/amanotes' },
   plugins: [
     {
       name: 'tapcraft',
-      source: './packages/claude',
       description,
       version: info.pluginVersion,
+      author,
+      source: './packages/claude',
+      category: 'development',
     },
   ],
 });
 await json(join(root, '.cursor-plugin', 'marketplace.json'), {
-  name: 'tapcraft',
+  name: marketplaceName,
   owner: author,
   metadata: {
-    description: 'TapCraft game development agent plugin.',
+    description: marketplaceDescription,
     version: info.pluginVersion,
   },
   plugins: [

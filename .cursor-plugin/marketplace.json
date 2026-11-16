@@ -1,10 +1,10 @@
 {
-  "name": "tapcraft",
+  "name": "amanotes",
   "owner": {
     "name": "Amanotes TapCraft team"
   },
   "metadata": {
-    "description": "TapCraft game development agent plugin.",
+    "description": "Amanotes TapCraft agent plugins",
     "version": "1.1.1"
   },
   "plugins": [
@@ -14,7 +14,7 @@
       "description": "Develop, port, optimize, test, and publish Cocos Creator games for the TapCraft platform.",
       "version": "1.1.1",
       "license": "Apache-2.0",
-      "repository": "https://github.com/phuongntamanotes/tapcraft-agent-skills"
+      "repository": "https://github.com/amanotes/tapcraft-agent-skills"
     }
   ]
 }

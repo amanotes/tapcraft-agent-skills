@@ -79,8 +79,11 @@ for (const [label, marketplace] of [
   ['Cursor marketplace', cursorMarketplace],
 ]) {
   const plugin = marketplace?.plugins?.[0];
-  if (marketplace?.name !== 'tapcraft' || plugin?.name !== 'tapcraft') {
-    errors.push(`${label}: marketplace and plugin names must be tapcraft`);
+  if (marketplace?.name !== 'amanotes') {
+    errors.push(`${label}: marketplace name must be amanotes`);
+  }
+  if (plugin?.name !== 'tapcraft') {
+    errors.push(`${label}: plugin name must be tapcraft`);
   }
   if (plugin?.version !== info?.pluginVersion) {
     errors.push(`${label}: version must match release-info.json`);
