@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "amanotes",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "Amanotes TapCraft agent plugins",
   "owner": {
     "name": "Amanotes TapCraft team",
@@ -11,7 +11,7 @@
     {
       "name": "tapcraft",
       "description": "Develop, port, optimize, test, and publish Cocos Creator games for the TapCraft platform.",
-      "version": "1.1.1",
+      "version": "2.0.0",
       "author": {
         "name": "Amanotes TapCraft team"
       },

@@ -9,7 +9,8 @@ game/
 ├── game.json
 ├── assets/
 │   ├── boot/                  start scene and tiny loading UI
-│   ├── scripts/               all scripts; scripts/hub is kit-owned
+│   ├── scripts/               all game scripts
+│   ├── tapcraft/              kit runtime from `tapcraft sync`; committed, never edited
 │   ├── core/                  local bundle, hub-local preset
 │   └── content/
 │       ├── shared/            shared remote assets
@@ -21,7 +22,7 @@ game/
 └── settings/cocos.config.json
 ```
 
-Run `npx com.amanotes.tapcraft-kit@1.2.0 create <slug>` for a new project or install the dependency and run `npx tapcraft init` for an existing one. Re-run `init` after a kit update so kit-owned runtime and templates match.
+Run `npx com.amanotes.tapcraft-kit@2.0.0 create <slug>` for a new project or install the dependency and run `npx tapcraft init` for an existing one. A kit update is `npm i com.amanotes.tapcraft-kit@latest` (its `postinstall` runs `tapcraft sync`); commit `assets/tapcraft/`.
 
 ## Decide local versus remote
 
@@ -36,6 +37,7 @@ Do not place prefabs, textures, audio, Spine, scenes, or scripts in `files/data`
 ## Loader
 
 ```ts
+const { content } = Tapcraft;
 const loaded = await content.load('song-a', { priority: 'critical' });
 if (!loaded.ok) return showRetry(loaded.reason);
 
@@ -45,11 +47,11 @@ if (!clip.ok) return showRetry(clip.reason);
 content.prefetch('song-b');
 content.pin('song-a');
 content.release('song-a');
-const songs = await content.json<Song[]>('data/songs.json');
+const songs = await content.json<Song[]>('data/songs.json');   // { ok, value, stale } | { ok: false, reason, status }
 const bannerUrl = content.url('assets/banner.json');
 ```
 
-- Handle result values; do not assume network success.
+- Everything is `Tapcraft.content.*` (`import { Tapcraft } from '../tapcraft/index'`). Handle result values; do not assume network success. `content.json` returns `stale: true` with the last good body when the network fails.
 - `content.load` resolves dependency bundles first.
 - Prefetch downloads but does not decode; instantiate/decode at a natural break.
 - Destroy nodes and game references before `content.release`.
@@ -63,16 +65,16 @@ Cocos keeps every remote file it downloads on disk, and TapCraft relies on that 
 **How the native cache works [4.0 src]**
 
 - Each downloaded file is stored under `<writablePath>/gamecaches/<bundle>/…` (the app gives every game its own writable folder; the cache survives app restarts and pack updates) and indexed in `gamecaches/cacheList.json` (written about 2 s after the last download; the kit writes it before the game unloads).
-- Lookup order on every load: in the pack → in the disk cache → download into the cache. Once a song or level bundle is in the cache, `content.load` works in airplane mode, also after the app restarts.
+- Lookup order on every load: in the pack → in the disk cache → download into the cache. Once a song or level bundle is in the cache, `Tapcraft.content.load` works in airplane mode, also after the app restarts.
 - The cache is **keyed by URL and never revalidated**, always on, with no size limit. `md5Cache` makes every changed file a new URL, so a new build fetches only what changed; old files stay on disk until the cache is cleared.
 - `content.release` frees **memory** (assets and the loaded bundle), not disk. A released bundle loads again from disk without network.
 - `content.prefetch` downloads into the disk cache without decoding (Wi-Fi only unless `{ anyNetwork: true }`). The next `content.load` reads from disk.
 
 **Song design (one song = one remote bundle)**
 
-- Bundle per song: `song-<id>` holding the audio clip, chart/beatmap asset and song-specific art. The song list itself is JSON in `files/data/` (`content.json('data/songs.json')`), so a new song needs no new pack.
+- Bundle per song: `song-<id>` holding the audio clip, chart/beatmap asset and song-specific art. The song list itself is JSON in `files/data/` (`Tapcraft.content.json('data/songs.json')`), so a new song needs no new pack.
 - First songs (the tutorial song and anything playable offline on day one) stay local.
-- When the player opens a song detail or the list scrolls near it, `content.prefetch('song-<id>')`; `content.load` at play time then reads from disk.
+- When the player opens a song detail or the list scrolls near it, `Tapcraft.content.prefetch('song-<id>')`; `content.load` at play time then reads from disk.
 - Show "downloaded" state honestly: a song played or prefetched once is cached, but the cache can be cleared by the OS or the app, so always handle `load` failure with retry, never assume it is still there.
 - Shared song UI, hit sounds and note skins go in a higher-priority shared bundle (or local), not copied into every song bundle.
 - After a song ends, release it (`content.release`) unless the player is likely to replay; `pin` only the song currently playing.
@@ -88,7 +90,7 @@ Cocos keeps every remote file it downloads on disk, and TapCraft relies on that 
 
 - Do not call `assetManager.cacheManager.clearCache()` / `clearLRU()` or delete `gamecaches`: it throws away every downloaded song and level, breaks offline play and costs the player data. Cache housekeeping belongs to the app.
 - Do not use `loadRemote` with your own URLs to "cache" art or audio; it bypasses bundles, md5 versioning and the kit's retries.
-- Do not cache downloaded bytes yourself in `saves` or `localStorage`.
+- Do not cache downloaded bytes yourself in `Tapcraft.storage` or `localStorage`.
 
 Details: [cocos-creator/asset-bundles.md](cocos-creator/asset-bundles.md) §6 (caching) and §7 (releasing memory); Cocos manual <https://docs.cocos.com/creator/4.0/manual/en/asset/cache-manager.html>, <https://docs.cocos.com/creator/4.0/manual/en/asset/preload-load.html>, <https://docs.cocos.com/creator/4.0/manual/en/asset/release-manager.html>.
 

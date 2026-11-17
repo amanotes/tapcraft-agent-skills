@@ -17,24 +17,28 @@ Read resources:
 ## Model
 
 - **Game:** permanent slug matching `game.json.id`.
-- **Build:** immutable pack zip for one platform, with an increasing build number.
+- **Build:** immutable pack zip for one platform, with an increasing build number. `tapcraft pack` writes `tapcraft.json` `{ kit, protocol, sdk }` at the zip root; the API records `protocol` per build (missing file = 1) and writes it into the catalog.
 - **Game files:** `remote/`, `data/`, and `assets/` of the game, uploaded through the MCP.
 - **Version:** version string, iOS/Android build numbers, and store listing.
+
+## Protocol gating and republishing
+
+The 2.0 app speaks protocol 2 only and hides catalog entries whose protocol it does not speak. A game built with kit 1.x stays hidden until it is rebuilt with kit 2 and republished as a **new build and new version** (builds of a published version never change). Kit 1.x saves are not migrated: players start with empty saves, so confirm that is acceptable before publishing a kit 2 build. Do not publish a pack that `tapcraft pack` did not produce.
 
 ## Release order
 
 1. For a first release, confirm the permanent `game.json.id`, then use the
    `first_release` prompt and `create_game`.
-2. Run `npx tapcraft build all`.
+2. Run `npx tapcraft build all` (fails when `assets/tapcraft/` is out of sync: `npx tapcraft sync`).
 3. Run `npx tapcraft check`; fix errors and review warnings.
 4. Test both platforms through `npx tapcraft serve`.
 5. Call `upload_files { game, prefix: "remote/" }`. Run the returned
    `uploadFolder` command with `LOCAL_FOLDER=build/ios-hub/data/remote`, then
    again with `LOCAL_FOLDER=build/android-hub/data/remote`.
 6. When present, upload `files/data` with prefix `data/`, and `files/assets`
-   with prefix `assets/`. `content.url('assets/...')` does not work until the
+   with prefix `assets/`. `Tapcraft.content.url('assets/...')` does not work until the
    matching assets upload exists.
-7. Run `npx tapcraft pack all`. It must confirm every remote file exists with
+7. Run `npx tapcraft pack all`. It writes `tapcraft.json` into the zip and must confirm every remote file exists with
    the expected hash.
 8. Per platform, call `create_build` and execute its returned `upload.curl`
    with `build/tapcraft-<platform>.zip`.

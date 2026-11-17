@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "Amanotes TapCraft agent plugins",
-    "version": "1.1.1"
+    "version": "2.0.0"
   },
   "plugins": [
     {
       "name": "tapcraft",
       "source": "./packages/cursor",
       "description": "Develop, port, optimize, test, and publish Cocos Creator games for the TapCraft platform.",
-      "version": "1.1.1",
+      "version": "2.0.0",
       "license": "Apache-2.0",
       "repository": "https://github.com/amanotes/tapcraft-agent-skills"
     }

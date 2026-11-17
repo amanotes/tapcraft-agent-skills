@@ -47,7 +47,7 @@ build/web-mobile/             index.html, application.<md5>.js, cocos-js/, asset
 - `jsb.*` names are legacy; in TS use `import { native } from 'cc'` (`native.fileUtils`, `native.AssetsManager`, `native.reflection`). Guard with `NATIVE` from 'cc/env' or `sys.isNative`.
 
 ## Storage and networking
-- `sys.localStorage` (strings; sqlite on native, Web Storage on web). Encrypt yourself if needed.
+- Saves: TapCraft games use `Tapcraft.storage`, never `sys.localStorage` (`tapcraft check` fails on it; kit 2 storage is a native key-value store).
 - HTTP: standard `fetch` / `XMLHttpRequest` (native implementation). WebSocket client = standard `WebSocket`.
 - Files on native: `native.fileUtils.getWritablePath()`, `isFileExist`, `writeStringToFile`, `getDataFromFile`, `createDirectory`, `removeDirectory`, `listFilesRecursively`, `setSearchPaths`.
 

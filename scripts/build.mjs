@@ -54,7 +54,7 @@ await json(join(claude, '.claude-plugin', 'plugin.json'), {
   privacyPolicyUrl: `${repository}/blob/main/PRIVACY.md`,
   icon: 'assets/icon.png',
   license: 'Apache-2.0',
-  keywords: ['tapcraft', 'cocos-creator', 'game-development', 'amagdk'],
+  keywords: ['tapcraft', 'cocos-creator', 'game-development', 'tapcraft-sdk'],
 });
 await json(join(claude, '.mcp.json'), {
   mcpServers: {
@@ -74,7 +74,7 @@ await json(join(cursor, '.cursor-plugin', 'plugin.json'), {
   repository,
   logo: 'assets/icon.png',
   license: 'Apache-2.0',
-  keywords: ['tapcraft', 'cocos-creator', 'game-development', 'amagdk'],
+  keywords: ['tapcraft', 'cocos-creator', 'game-development', 'tapcraft-sdk'],
   skills: './skills/',
   rules: './rules/',
   commands: './commands/',

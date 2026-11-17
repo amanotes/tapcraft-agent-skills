@@ -1,8 +1,8 @@
 {
-  "pluginVersion": "1.1.1",
-  "minimumPluginVersion": "1.0.0",
-  "minimumKitVersion": "1.2.0",
-  "verifiedKitVersion": "1.2.0",
+  "pluginVersion": "2.0.0",
+  "minimumPluginVersion": "2.0.0",
+  "minimumKitVersion": "2.0.0",
+  "verifiedKitVersion": "2.0.0",
   "engineVersion": "4.0.0-beta.1",
   "engineProfile": "8ec328",
   "githubRepository": "amanotes/tapcraft-agent-skills",

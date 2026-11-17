@@ -17,8 +17,9 @@ Measure on an iPhone XR/11 or Galaxy A14/Redmi 12 class device through the inter
 
 - Keep boot under roughly 300 KB: camera, canvas, solid background, logo, progress.
 - Do no heavy work at module scope.
-- Draw first, hide the platform loader, then load local menu/core.
-- Start no remote request on the path to `gameReady`.
+- Draw first, hide the platform loader (`Tapcraft.lifecycle.hidePlatformLoadingScreen()`), then load local menu/core.
+- Start no remote request on the path to `Tapcraft.lifecycle.gameReady()`.
+- `await Tapcraft.init()` loads saves from native storage once; do not block boot on anything else.
 - Defer physics, Spine, particles, pools, audio, and large JSON until needed.
 
 ## Pack and GPU memory
@@ -39,6 +40,13 @@ Measure on an iPhone XR/11 or Galaxy A14/Redmi 12 class device through the inter
 - Prefetch during safe time, but decode/instantiate only at a transition.
 - Spread heavy setup across frames with an explicit time budget.
 - Set 60 fps for gameplay and optionally 30 fps for static screens.
+
+## Saves and bridge calls
+
+- Storage reads and writes are in-memory and cheap; the commit to the device is batched natively off the JS thread. Do not hand-batch or cache saves in other stores.
+- `await Tapcraft.storage.flush()` waits for a native commit: use it at milestones, never per frame or per tap. Keep saved values small (1 MiB per value, 5 MiB per game); large data is content.
+- Native calls (ads, haptics, analytics, storage commits) cross a batched bridge: all messages of one frame leave together. Fire-and-forget calls (`haptics.impact`, `analytics.logEvent`) are cheap but not free: do not call them every frame, and avoid `JSON`-heavy params.
+- Do not `await` a bridge call inside the frame loop; results arrive asynchronously.
 
 ## Memory
 

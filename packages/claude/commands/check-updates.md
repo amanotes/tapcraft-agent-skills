@@ -14,6 +14,7 @@ Report:
 - installed, minimum, verified, and latest `com.amanotes.tapcraft-kit`
   versions;
 - whether each component is unsupported, behind, current, or unknown;
-- release/changelog links when an update is available.
+- release/changelog links when an update is available;
+- for a kit below 2.0.0: that kit 1.x games are hidden by the 2.0 app and need the kit 2 port (`references/kit-2-migration.md` of the `tapcraft` skill).
 
 This command is read-only. Do not install, update, or edit project files.

@@ -1,26 +1,35 @@
+// Boot component model for the Tapcraft SDK (kit 2.0): same call order as the kit's starter Boot.ts.
+// `../tapcraft` is assets/tapcraft/, written by `tapcraft sync`; never edit it.
 import { _decorator, AudioSource, Component, director } from 'cc';
-import { content } from '../scripts/hub/content';
-import { platform } from '../scripts/hub/platform';
-import { saves } from '../scripts/hub/saves';
+import { Tapcraft } from '../tapcraft/index';
 
 const { ccclass } = _decorator;
 const SAVE_SCHEMA = 1;
 
+interface Progress {
+  best: number;
+}
+
 @ccclass('Boot')
 export class Boot extends Component {
   private readonly pausedAudio = new Set<AudioSource>();
+  private offPause: (() => void) | null = null;
+  private offResume: (() => void) | null = null;
+  progress: Progress = { best: 0 };
 
-  async start(): Promise<void> {
-    await platform.init();
-    platform.firstFrameReady();
-    this.scheduleOnce(() => platform.hidePlatformLoadingScreen(), 0);
+  override async start(): Promise<void> {
+    await Tapcraft.init(); // loads saves, wires lifecycle; never rejects
+    Tapcraft.lifecycle.firstFrameReady(); // the small local loading UI is drawn
+    this.scheduleOnce(() => Tapcraft.lifecycle.hidePlatformLoadingScreen(), 0);
 
-    if (saves.schema < SAVE_SCHEMA) {
-      // Migrate older saves before advancing the schema.
-      saves.setSchema(SAVE_SCHEMA);
+    if (Tapcraft.storage.schema < SAVE_SCHEMA) {
+      // Migrate older saves here, then advance the schema.
+      Tapcraft.storage.setSchema(SAVE_SCHEMA);
     }
+    this.progress = Tapcraft.storage.getJson<Progress>('progress', { best: 0 });
 
-    platform.onPause(() => {
+    // Every pause reason (hubMenu, background, ad, exit, system): stop gameplay, timers and all audio.
+    this.offPause = Tapcraft.lifecycle.onPause(() => {
       this.pausedAudio.clear();
       for (const source of this.node.scene?.getComponentsInChildren(AudioSource) ?? []) {
         if (!source.playing) continue;
@@ -29,13 +38,13 @@ export class Boot extends Component {
       }
       director.pause();
     });
-    platform.onResume(() => {
+    this.offResume = Tapcraft.lifecycle.onResume(() => {
       director.resume();
       for (const source of this.pausedAudio) source.play();
       this.pausedAudio.clear();
     });
 
-    const core = await content.load('core', { priority: 'critical' });
+    const core = await Tapcraft.content.load('core', { priority: 'critical' });
     if (!core.ok) {
       console.error('[boot] local core bundle failed', core.reason);
       return;
@@ -47,7 +56,20 @@ export class Boot extends Component {
         return;
       }
       director.runScene(scene);
-      platform.gameReady();
+      Tapcraft.lifecycle.gameReady(); // when the menu accepts input
     });
+  }
+
+  override onDestroy(): void {
+    this.offPause?.();
+    this.offResume?.();
+  }
+
+  /** Call when a new best is reached: milestone, so wait for the native commit. */
+  async saveBest(score: number): Promise<void> {
+    if (score <= this.progress.best) return;
+    this.progress = { best: score };
+    Tapcraft.storage.setJson('progress', this.progress);
+    await Tapcraft.storage.flush(); // { status: 'flushed' | 'unavailable' | 'error' }; never rejects
   }
 }
