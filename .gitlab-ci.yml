@@ -5,6 +5,8 @@ stages:
 
 test:
   stage: test
+  before_script:
+    - apk add --no-cache git   # node:22-alpine has no git; the job checks that packages/ is committed
   script:
     - npm test
     - git diff --exit-code
